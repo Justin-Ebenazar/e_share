@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teachable Machine Styled UI</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .export-btn {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .progress {
+            height: 24px;
+            width: 0;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 24px;
+            color: white;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/eV1fOcJTY/";
+
+        let model, webcam, labelContainer, maxPredictions, stopRequested = false;
+
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            const flip = true;
+            webcam = new tmImage.Webcam(200, 200, flip);
+            await webcam.setup();
+            await webcam.play();
+            stopRequested = false;
+            window.requestAnimationFrame(loop);
+
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                const progressBar = document.createElement("div");
+                progressBar.className = "progress-bar";
+                const progress = document.createElement("div");
+                progress.className = "progress";
+                progressBar.appendChild(progress);
+                labelContainer.appendChild(progressBar);
+            }
+        }
+
+        async function loop() {
+            if (!stopRequested) {
+                webcam.update();
+                await predict();
+                window.requestAnimationFrame(loop);
+            }
+        }
+
+        async function predict() {
+            const prediction = await model.predict(webcam.canvas);
+            const colors = ["#E67701", "#D84C6F", "#794AEF", "#1967D2", "#E67701"];
+            for (let i = 0; i < maxPredictions; i++) {
+                const progress = labelContainer.childNodes[i].firstChild;
+                progress.style.width = (prediction[i].probability * 100) + "%";
+                progress.style.backgroundColor = colors[i % colors.length];
+                progress.innerHTML = prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(2) + "%";
+            }
+        }
+
+        function stop() {
+            stopRequested = true;
+            webcam.stop();
+            document.getElementById("webcam-container").innerHTML = "";
+            labelContainer.innerHTML = "";
+        }
+    </script>
+</head>
+<body>
+    <div class="container" id="run-panel">
+        <div id="header-row" class="section">
+            <div id="label">Preview</div>
+            <button class="export-btn" label="Export Model">Export Model</button>
+        </div>
+        <div id="body-container">
+            <div class="section">
+                <div id="input-container-row">
+                    <select id="select-input">
+                        <option>webcam</option>
+                        <option>file</option>
+                    </select>
+                </div>
+                <div id="slot-container">
+                    <slot></slot>
+                </div>
+            </div>
+            <div class="section no-border" style="display: block">
+                <h4>Output</h4>
+                <div id="label-container"></div>
+            </div>
+        </div>
+        <div id="webcam-container"></div>
+        <button type="button" onclick="init()">Start</button>
+        <button type="button" onclick="stop()">Stop</button>
+    </div>
+</body>
+</html>

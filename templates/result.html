@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-waste Manager</title>
+    <!-- <link rel="icon" href="pics/repairstut.png" type="image/png"> -->
+    <link rel="stylesheet" href="{{url_for("static",filename='mystyle.css')}}">
+</head>
+
+<body>
+    <div id="header">
+        <img src="static/pics/logo_text">
+    </div>
+    
+    <div style="display: flex; justify-content: left; align-items: center; 
+    width: 95vw; height: 80vh; margin-top: 2.5vh; margin-left: 2.5vw;">
+    <div id="viewpage_imgframe">
+        <div id="image_w_scroll">
+            <button id="lscro" onclick="vscrollxb()"><</button>
+            <div id="imgs_frame" >
+                    {% for i in images %}
+                    <div id="each_img">
+                        <img src="data:{{ i.mime }};base64,{{ i.img | safe }}" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    {% endfor %}
+            </div>
+            <button id="rscro" onclick="vscrollxf()">></button>
+        </div>
+    </div>
+    <div>
+            <div id="desc_card" style="background-color: rgba(33, 43, 43, 0.411); width: 50vw; height: 70vh; margin-left: 20px; display: flex; border: 1px solid rgba(255,255,255,0.3);">
+                <table style="margin-left: 10px; margin-top: 10px; font-size: 5vh;">
+                <tr>
+                    <td>Description :</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>{{ post_details.descript }}</td>
+                </tr>
+                <tr>
+                    <td>Components:</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>{{ post_details.components }}</td>
+                </tr>
+                <tr>
+                    <td>Location :</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>{{ post_details.loca }}</td>
+                </tr>
+                <tr>
+                    <td>Mobile:</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="tel:{{ post_details.mobile }}" style="color: aliceblue; text-decoration: none;">{{ post_details.mobile }}</a></td>
+                </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='javares.js')}}"></script>
+</body>
+
+</html>

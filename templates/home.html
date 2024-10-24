@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-waste Manager</title>
+    <!-- <link rel="icon" href="pics/repairstut.png" type="image/png"> -->
+    <link rel="stylesheet" href="{{url_for("static",filename='mystyle.css')}}">
+</head>
+
+<body>
+    <div id="header">
+        <img src="static/pics/logo_im.jpg" style="height: 70px;
+        width: 70px; border-radius:15px 0px 0px 15px">
+        <img src="static/pics/logo_text.jpg" style="height: 70px;
+        width: 190px; border-radius: 0px 15px 15px 0px">
+
+        <form method="post" action="search_item">
+        <select id="myselect_home" aria-haspopup="true" name="FILTER">
+            <option value="component">Search by component</option>
+            <option value="product">Search for product</option>
+        </select>
+
+        <input type="text" id="search" placeholder="Find your needs here :)" name="SEARCHVALUE">
+        <button id="theduga">Search</button></a>
+        </form>
+        <button id="virka" onclick="virka_open()" >Sell</button>
+    </div>
+
+    <div id="main_section">
+        <table id="cards_holder" cellspacing="10px">
+            {% for det in info %}
+              {% if loop.index % 2 == 1 %}
+                <tr>
+                  <td>
+                    <div id="card">
+                      <div id="image_card">
+                        <img src="data:{{ det.mime }};base64,{{ det.img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
+                      </div>
+                      <div id="desc_card" style="background-color: aqua;">
+                        <table style="margin-left: 10px; margin-top: 10px;">
+                          <tr>
+                            <td>Description :</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>{{ det.descript }}</td>
+                          </tr>
+                          <tr>
+                            <td>Components :</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>{{ det.components }}</td>
+                          </tr>
+                          <tr>
+                            <td>Location :</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td>{{ det.loca }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                    <a href="{{ url_for('view_post', post_id=det.post_id) }}"><button id="postkanbi">View</button></a>
+                    </div>
+                  </td>
+                  {% if loop.index != info|length %}
+                    <td>
+                      {% set next_det = info[loop.index] %}
+                      <div id="card">
+                        <div id="image_card">
+                          <img src="data:{{ next_det.mime }};base64,{{ next_det.img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
+                        </div>
+                        <div id="desc_card" style="background-color: aqua;">
+                          <table style="margin-left: 10px; margin-top: 10px;">
+                            <tr>
+                              <td>Description :</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>{{ next_det.descript }}</td>
+                            </tr>
+                            <tr>
+                              <td>Components :</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>{{ next_det.components }}</td>
+                            </tr>
+                            <tr>
+                              <td>Location :</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>{{ next_det.loca }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                      <a href="{{ url_for('view_post', post_id=det.post_id) }}"><button id="postkanbi">View</button></a>
+                      </div>
+                    </td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
+
+        <div id="new_product_sale">
+        <div id="moodu" style="display: flex; justify-content: right; width: 90%;">
+            <p style="font-size: larger; cursor: pointer;" onclick="virka_close()">&times;</p>
+        </div>
+        <form action="/post_ad" id="poster" method="post" enctype="multipart/form-data">
+        <div style="display:flex; align-items: center; flex-direction: column; justify-content: end; height: 65vh;" >
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <button id="scroll-button" onclick="scrollxb()" type="button"><</button>
+                    <div id="selected-images"></div>
+                    <button id="scroll-button" onclick="scrollxf()" type="button">></button>
+                </div>
+                <button id="add-images-btn">Add Images</button>
+                <input type="file" required multiple accept="image/*" id="image-input" style="display:none;" name="images[]">
+
+
+                <table cellspacing="10px">
+                    <tr>
+                        <td>
+                            <input type="checkbox" value="Capacitor" name="chek">
+                        </td>
+                        <td>Capacitor</td>
+                        <td>
+                            <input type="checkbox" value="Resistor" name="chek">
+                            </td>
+                            <td>Resistor</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <input type="checkbox" value="Transistor" name="chek">
+                        </td>
+                        <td>Transistor</td>
+                        <td>
+                            <input type="checkbox" value="Led" name="chek">
+                            </td>
+                            <td>Led</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <input type="checkbox" value="IC" name="chek">
+                        </td>
+                        <td>IC</td>
+                        <td><input type="text" name="description" required ></td>
+                        <td>Custom</td>
+                        <td><input id='texted' type="text" style="height: 20px; width: 70px;" placeholder="Others" name="cust_text"></td>
+                    </tr>
+                </table>
+                <button type="submit" id="post_im" >
+                    <img src="static/pics/3r.png" style="width: 20px; height: 20px;">
+                    <p style="padding: 5px;">Post</p>
+                </button>
+            </div>
+            </form>
+            <script>
+            document.getElementById('poster').addEventListener('submit', function(event) {
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                var textInput = document.getElementById('texted');
+                var fileInput = document.getElementById('image-input');
+              
+                var checked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                var hasText = textInput.value.trim() !== '';
+                var hasFile = fileInput.files.length > 0;
+              
+                if (!hasFile || (!checked && !hasText)) {
+                  event.preventDefault();
+                  alert('Please select a file and (check at least one option or enter text).');
+                  return false;
+                }
+              });
+            </script>          
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='javafile.js')}}"></script>
+
+</body>
+
+</html>
