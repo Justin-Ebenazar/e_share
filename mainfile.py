@@ -92,7 +92,7 @@ def post_ad():
                                (post_id, i, j))
                 con.commit()
 
-            return redirect('/result')
+            return redirect('/home')
         except Exception as e:
             print(f"Error: {e}")
             return "Error nadanthathu"
@@ -103,7 +103,17 @@ def post_ad():
 
 @app.route('/home')
 def home():
-    return render_template("home.html")
+    global username
+    try:
+        cursor.execute(f"SELECT p.post_id, p.username, p.components, p.descript, hex(i.img) as img, i.mime,l.loca FROM posts p JOIN images i ON p.post_id = i.post_id inner join login_credentials l on p.username=l.username WHERE p.username != '{username}' ORDER BY p.post_id DESC LIMIT 6")
+    except:
+        print("etho error iruku")
+    posts = cursor.fetchall()
+    for post in posts:
+        # Process each post and its corresponding image
+        post.update({'img':b64encode(binascii.unhexlify(post['img'])).decode('utf-8').replace('\r', '').replace(u'\xa0', ' ').replace('¶', '')})
+
+    return render_template('home.html',info=posts)
 
 @app.route('/search_item',methods=['POST','GET'])
 def search_item():
@@ -118,21 +128,6 @@ def search_item():
             post.update({'img':b64encode(binascii.unhexlify(post['img'])).decode('utf-8').replace('\r', '').replace(u'\xa0', ' ').replace('¶', '')})
 
         return render_template('home.html',info=posts)
-
-@app.route('/result')
-def result():
-    global username
-    try:
-        cursor.execute(f"SELECT p.post_id, p.username, p.components, p.descript, hex(i.img) as img, i.mime,l.loca FROM posts p JOIN images i ON p.post_id = i.post_id inner join login_credentials l on p.username=l.username WHERE p.username != '{username}' ORDER BY p.post_id DESC LIMIT 5")
-    except:
-        print("etho error iruku")
-    posts = cursor.fetchall()
-    for post in posts:
-        # Process each post and its corresponding image
-        post.update({'img':b64encode(binascii.unhexlify(post['img'])).decode('utf-8').replace('\r', '').replace(u'\xa0', ' ').replace('¶', '')})
-
-    return render_template('home.html',info=posts)
-
 
 @app.route('/view_post/<int:post_id>')
 def view_post(post_id):
