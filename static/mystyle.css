@@ -251,7 +251,7 @@ input{
 /* start of home page */
 
 #header{
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0);
     border-radius: 15px;
     /*width: 100%;*/
     height: 70px;
@@ -294,16 +294,17 @@ select{
     display: flex;
     align-items: top;
     justify-content: left;
-    background-color: blue;
+    background-color: rgba(0,0,0,0.5);
     border-radius: 5px;
     width: 90vh;
     position: relative;
+    border: 1px solid rgba(255,255,255,0.7);
 }
 
 #image_card,#image{
     width: 37vh;
     height: 37vh;
-    background-color: red;
+    background-color: rgb(30, 32, 31);
     border-radius: 5px 0px 0px 5px;
     box-shadow: rgba(0,0,0,0.3) 4px 0px 5px;
 }
@@ -322,7 +323,7 @@ select{
 #search{
     border-radius: 10px 0px 0px 10px;
     width: 50vh;
-    margin-left: 10px;
+    margin-left: 35vw;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -336,6 +337,7 @@ select{
     border: none;
     border-radius: 0px 10px 10px 0px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    /* margin-left: 50vw; */
 }
 
 #theduga:hover{
@@ -394,22 +396,24 @@ select{
 }
 
 #new_product_sale{
-    position: absolute;
-    top: 5vh;
-    width: 50vh;
-    height: 70vh;
+    position: fixed;
+    /* top: 5vh; */
+    margin-left: 2vw;
+    width: 100vh;
+    height: 60vh;
     display: none;
     flex-direction: column;
     justify-content: top;
     align-items: center;
+    color: white;
+    font-family: 'Franklin Gothic light', 'Arial Narrow', Arial, sans-serif;
     background-color: rgba(0,0,0,0.4);
     border: 1px solid white;
     border-radius: 20px;
     backdrop-filter: blur(5px);
-    z-index: 1;
     perspective: 1000px;
-    color: white;
-    font-family: 'Franklin Gothic light', 'Arial Narrow', Arial, sans-serif;
+    z-index: 1;
+
 }
 
 #selected-images{
@@ -516,7 +520,6 @@ select{
 #image_w_scroll{
     width: 40vw;
     height: 75vh;
-    /* background-color: blue; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -532,7 +535,7 @@ select{
     width: 40vw;
     height: 75vh;
     position: absolute;
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
     scroll-behavior: smooth;

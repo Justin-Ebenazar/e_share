@@ -30,7 +30,7 @@ def sign_in():
         if(len(data)!=0):
             username=user_name
             password=pass_word
-            return render_template("home.html")
+            return redirect("/home")
         else:
             return render_template("index.html",info={},cred="w_signin")
 

@@ -11,8 +11,23 @@
 
 <body>
     <div id="header">
-        <img src="static/pics/logo_text">
+        <img src="static/pics/logo_im.jpg" style="height: 70px;
+        width: 70px; border-radius:15px 0px 0px 15px">
+        <img src="static/pics/logo_text.jpg" style="height: 70px;
+        width: 190px; border-radius: 0px 15px 15px 0px">
+
+        <form method="post" action="search_item">
+        <select id="myselect_home" aria-haspopup="true" name="FILTER" style="display: none;">
+            <option value="component">Search by component</option>
+            <option value="product">Search for product</option>
+        </select>
+
+        <input type="text" id="search" placeholder="Find your needs here :)" name="SEARCHVALUE">
+        <button id="theduga">Search</button></a>
+        </form>
+        <button id="virka" onclick="virka_open()" >Sell</button>
     </div>
+
     
     <div style="display: flex; justify-content: left; align-items: center; 
     width: 95vw; height: 80vh; margin-top: 2.5vh; margin-left: 2.5vw;">
@@ -65,6 +80,7 @@
         </div>
     </div>
     <script src="{{url_for('static', filename='javares.js')}}"></script>
+    <script src="{{url_for('static', filename='javafile.js')}}"></script>
 </body>
 
 </html>

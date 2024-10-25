@@ -29,138 +29,151 @@
     </div>
 
     <div id="main_section">
-        <table id="cards_holder" cellspacing="10px">
-            {% for det in info %}
-              {% if loop.index % 2 == 1 %}
-                <tr>
-                  <td>
-                    <div id="card">
-                      <div id="image_card">
-                        <img src="data:{{ det.mime }};base64,{{ det.img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
-                      </div>
-                      <div id="desc_card" style="background-color: aqua;">
-                        <table style="margin-left: 10px; margin-top: 10px;">
-                          <tr>
-                            <td>Description :</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td>{{ det.descript }}</td>
-                          </tr>
-                          <tr>
-                            <td>Components :</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td>{{ det.components }}</td>
-                          </tr>
-                          <tr>
-                            <td>Location :</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td>{{ det.loca }}</td>
-                          </tr>
-                        </table>
-                      </div>
-                    <a href="{{ url_for('view_post', post_id=det.post_id) }}"><button id="postkanbi">View</button></a>
-                    </div>
-                  </td>
-                  {% if loop.index != info|length %}
-                    <td>
-                      {% set next_det = info[loop.index] %}
-                      <div id="card">
-                        <div id="image_card">
-                          <img src="data:{{ next_det.mime }};base64,{{ next_det.img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
-                        </div>
-                        <div id="desc_card" style="background-color: aqua;">
-                          <table style="margin-left: 10px; margin-top: 10px;">
-                            <tr>
-                              <td>Description :</td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td>{{ next_det.descript }}</td>
-                            </tr>
-                            <tr>
-                              <td>Components :</td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td>{{ next_det.components }}</td>
-                            </tr>
-                            <tr>
-                              <td>Location :</td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td>{{ next_det.loca }}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      <a href="{{ url_for('view_post', post_id=det.post_id) }}"><button id="postkanbi">View</button></a>
-                      </div>
-                    </td>
-                  {% else %}
-                    <td></td>
-                  {% endif %}
-                </tr>
-              {% endif %}
-            {% endfor %}
-          </table>
+      <table id="cards_holder" cellspacing="10px">
+        {% for i in range(0, info|length, 2) %}
+          <tr>
+            <td>
+              <div id="card">
+                <div id="image_card">
+                  <img src="data:{{ info[i].mime }};base64,{{ info[i].img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
+                </div>
+                <div id="desc_card" style="background-color: rgb(233, 64, 64); border: 1px solid rgba(255,255,255,0.3)">
+                  <table style="margin-left: 10px; margin-top: 10px;">
+                    <tr>
+                      <td>Description :</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>{{ info[i].descript }}</td>
+                    </tr>
+                    <tr>
+                      <td>Components :</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>{{ info[i].components }}</td>
+                    </tr>
+                    <tr>
+                      <td>Location :</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>{{ info[i].loca }}</td>
+                    </tr>
+                  </table>
+                </div>
+                <a href="{{ url_for('view_post', post_id=info[i].post_id) }}"><button id="postkanbi">View</button></a>
+              </div>
+            </td>
+            {% if i + 1 < info|length %}
+              <td>
+                <div id="card">
+                  <!-- Card content for info[i + 1] -->
+                  <div id="image_card">
+                    <img src="data:{{ info[i + 1].mime }};base64,{{ info[i + 1].img | safe }}" style="width: 100%; height: 100%; object-fit: contain;"/>
+                  </div>
+                  <div id="desc_card" style="background-color: rgb(233, 64, 64); border: 1px solid rgba(255,255,255,0.3)">
+                    <table style="margin-left: 10px; margin-top: 10px;">
+                      <tr>
+                        <td>Description :</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>{{ info[i + 1].descript }}</td>
+                      </tr>
+                      <tr>
+                        <td>Components :</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>{{ info[i + 1].components }}</td>
+                      </tr>
+                      <tr>
+                        <td>Location :</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>{{ info[i + 1].loca }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <a href="{{ url_for('view_post', post_id=info[i + 1].post_id) }}"><button id="postkanbi">View</button></a>
+                </div>
+              </td>
+            {% else %}
+              <td></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </table>      
+      
+            
 
         <div id="new_product_sale">
-        <div id="moodu" style="display: flex; justify-content: right; width: 90%;">
-            <p style="font-size: larger; cursor: pointer;" onclick="virka_close()">&times;</p>
+        <div id="moodu" style="display: flex; justify-content: right; width: 90%; margin-top: 1vh;">
+            <p style="font-size: 5vh; cursor: pointer;" onclick="virka_close()">&times;</p>
         </div>
-        <form action="/post_ad" id="poster" method="post" enctype="multipart/form-data">
-        <div style="display:flex; align-items: center; flex-direction: column; justify-content: end; height: 65vh;" >
-                <div style="display: flex; justify-content: center; align-items: center;">
-                    <button id="scroll-button" onclick="scrollxb()" type="button"><</button>
-                    <div id="selected-images"></div>
-                    <button id="scroll-button" onclick="scrollxf()" type="button">></button>
+        <form action="/post_ad" id="poster" method="post" enctype="multipart/form-data" style="margin-top: 5vh;">
+            <div  style="display:flex; align-items: center; justify-content: end; gap: 3vw;">
+                <div style="display:flex; align-items: center; justify-content: end; flex-direction: column;" >
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <button id="scroll-button" onclick="scrollxb()" type="button"><</button>
+                        <div id="selected-images"></div>
+                        <button id="scroll-button" onclick="scrollxf()" type="button">></button>
+                    </div>
+                    <button id="add-images-btn">Add Images</button>
+                    <input type="file" required multiple accept="image/*" id="image-input" style="display:none;" name="images[]">
                 </div>
-                <button id="add-images-btn">Add Images</button>
-                <input type="file" required multiple accept="image/*" id="image-input" style="display:none;" name="images[]">
-
-
-                <table cellspacing="10px">
-                    <tr>
-                        <td>
-                            <input type="checkbox" value="Capacitor" name="chek">
-                        </td>
-                        <td>Capacitor</td>
-                        <td>
-                            <input type="checkbox" value="Resistor" name="chek">
+                <div style="display: flex; align-items: top; justify-content: center; flex-direction: column;">
+                    <table cellspacing="20vw">
+                        <tr>
+                          <td colspan="4" align="center" style="text-align: center;"><input type="text" name="description" required style="border-radius: 5px; height: 10vh;" placeholder="Description"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" value="Capacitor" name="chek">
                             </td>
-                            <td>Resistor</td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="checkbox" value="Transistor" name="chek">
-                        </td>
-                        <td>Transistor</td>
-                        <td>
-                            <input type="checkbox" value="Led" name="chek">
+                            <td>Capacitor</td>
+                            <td>
+                                <input type="checkbox" value="Resistor" name="chek">
+                                </td>
+                                <td>Resistor</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <input type="checkbox" value="Transistor" name="chek">
                             </td>
-                            <td>Led</td>
-                    </tr>
-                    <tr>
-                        <td>
-                        <input type="checkbox" value="IC" name="chek">
-                        </td>
-                        <td>IC</td>
-                        <td><input type="text" name="description" required ></td>
-                        <td>Custom</td>
-                        <td><input id='texted' type="text" style="height: 20px; width: 70px;" placeholder="Others" name="cust_text"></td>
-                    </tr>
-                </table>
-                <button type="submit" id="post_im" >
-                    <img src="static/pics/3r.png" style="width: 20px; height: 20px;">
-                    <p style="padding: 5px;">Post</p>
-                </button>
+                            <td>Transistor</td>
+                            <td>
+                                <input type="checkbox" value="Led" name="chek">
+                                </td>
+                                <td>Led</td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <input type="checkbox" value="IC" name="chek">
+                            </td>
+                            <td>IC</td>
+                            <td colspan="2"><input id='texted' type="text" style="height: 20px; width: 70px;" placeholder="Custom" name="cust_text"></td>
+                        </tr>
+                    </table>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 2vw;">
+                        <a href="{{ url_for('static', filename='model.html')}}">
+                        <button style="display: flex; background-color: black; color: white; outline: none; border: none;
+                        border: 1px solid rgba(255,255,255,0.5); border-radius: 10px;" type="button">
+                          <img src="static/pics/ai.jpeg" style="width: 20px; height: 25px; border-radius: 10px;">
+                          <p style="padding: 5px;">Use AI</p>
+                        </button>
+                        </a>
+                        <button type="submit" id="post_im" >
+                          <img src="static/pics/3r.png" style="width: 20px; height: 20px;">
+                          <p style="padding: 5px;">Post</p>
+                        </button>
+                    </div>
+                </div>
             </div>
             </form>
+            </div>
             <script>
             document.getElementById('poster').addEventListener('submit', function(event) {
                 var checkboxes = document.querySelectorAll('input[type="checkbox"]');
